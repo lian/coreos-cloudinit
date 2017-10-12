@@ -22,6 +22,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"runtime"
 	"sync"
 	"time"
@@ -43,7 +44,6 @@ import (
 	"github.com/coreos/coreos-cloudinit/initialize"
 	"github.com/coreos/coreos-cloudinit/network"
 	"github.com/coreos/coreos-cloudinit/pkg"
-	"github.com/coreos/coreos-cloudinit/system"
 )
 
 const (
@@ -411,9 +411,11 @@ func runScript(script config.Script, env *initialize.Environment) error {
 	}
 	path, err := initialize.PersistScriptInWorkspace(script, env.Workspace())
 	if err == nil {
-		var name string
-		name, err = system.ExecuteScript(path)
-		initialize.PersistUnitNameInWorkspace(name, env.Workspace())
+		log.Printf("runScript: %s\n", path)
+		cmd := exec.Command(path)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		err = cmd.Run()
 	}
 	return err
 }
