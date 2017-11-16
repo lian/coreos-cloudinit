@@ -283,7 +283,7 @@ func processUnits(units []system.Unit, root string, um system.UnitManager) error
 
 	for _, action := range actions {
 		log.Printf("Calling unit command %q on %q", action.command, action.unit.Name)
-		res, err := um.RunUnitCommand(action.unit, action.command)
+		res, err := um.RunUnitCommand_NonblockStart(action.unit, action.command)
 		if err != nil {
 			return err
 		}

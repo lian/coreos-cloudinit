@@ -76,6 +76,18 @@ func (s *systemd) EnableUnitFile(u Unit) error {
 	return err
 }
 
+func (s *systemd) RunUnitCommand_NonblockStart(u Unit, c string) (string, error) {
+	if c == "start" {
+		conn, err := dbus.New()
+		if err != nil {
+			return "", err
+		}
+		return conn.StartUnitNonblock(u.Name, "replace")
+	}
+
+	return RunUnitCommand(u, c)
+}
+
 func (s *systemd) RunUnitCommand(u Unit, c string) (string, error) {
 	conn, err := dbus.New()
 	if err != nil {

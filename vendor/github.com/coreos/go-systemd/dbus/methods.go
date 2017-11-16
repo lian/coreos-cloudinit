@@ -88,6 +88,15 @@ func (c *Conn) StartUnit(name string, mode string) (string, error) {
 	return c.runJob("org.freedesktop.systemd1.Manager.StartUnit", name, mode)
 }
 
+func (c *Conn) StartUnitNonblock(name string, mode string) (string, error) {
+	var path dbus.ObjectPath
+	err := c.sysobj.Call("org.freedesktop.systemd1.Manager.StartUnit", 0, name, mode).Store(&path)
+	if err != nil {
+		return "", err
+	}
+	return "", nil
+}
+
 // StopUnit is similar to StartUnit but stops the specified unit rather
 // than starting it.
 func (c *Conn) StopUnit(name string, mode string) (string, error) {
