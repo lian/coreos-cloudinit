@@ -78,7 +78,7 @@ func CreateUser(u *config.User) error {
 
 	args = append(args, u.Name)
 
-	output, err := exec.Command("useradd", args...).CombinedOutput()
+	output, err := exec.Command("/usr/sbin/useradd", args...).CombinedOutput()
 	if err != nil {
 		log.Printf("Command 'useradd %s' failed: %v\n%s", strings.Join(args, " "), err, output)
 	}
